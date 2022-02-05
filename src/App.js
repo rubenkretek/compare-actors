@@ -1,9 +1,9 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 //Components
 import MovieThumbnail from './components/MovieThumbnail';
-
+import Actor from './components/Actor';
 
 
 
@@ -14,9 +14,14 @@ function App() {
   const [movieList1, updateMovieList1] = useState([]);
   const [movieList2, updateMovieList2] = useState([]);
 
+  const [selectedMovie1, setSelectedMovie1] = useState(null);
+  const [selectedMovie2, setSelectedMovie2] = useState(null);
+
+  const [filteredActors, setfilteredActors] = useState([]);
+
+
   const [timeoutId, updateTimeoutId] = useState();
 
-  const [searchQuery, updateSearchQuery] = useState();
 
   // Fetch Data
   const fetchMoviesList = async (searchString, movieList) => {
@@ -40,9 +45,6 @@ function App() {
       });
   };
 
-
-
-
   //Event handlers
   const movieSearchQuery1 = (e) => {
     clearTimeout(timeoutId);
@@ -56,6 +58,13 @@ function App() {
     updateTimeoutId(timeout);
   };
 
+  useEffect(() => {
+    if (selectedMovie1 && selectedMovie2) {
+      const filterMatchingActors = selectedMovie1.filter((element) => selectedMovie2.includes(element));
+      setfilteredActors(filterMatchingActors);
+    }
+  }, [selectedMovie1, selectedMovie2])
+
   return (
     <div className="App">
 
@@ -65,7 +74,11 @@ function App() {
           movieList1.map((movie) => (
             <MovieThumbnail
               key={movie.id}
+              movieSelectnumber={1}
+              movieId={movie.id}
               movieTitle={movie.l}
+              selectedMovie1={selectedMovie1}
+              setSelectedMovie1={setSelectedMovie1}
             />
           ))
         ) : (
@@ -79,13 +92,19 @@ function App() {
           movieList2.map((movie) => (
             <MovieThumbnail
               key={movie.id}
+              movieSelectnumber={2}
+              movieId={movie.id}
               movieTitle={movie.l}
+              selectedMovie2={selectedMovie2}
+              setSelectedMovie2={setSelectedMovie2}
             />
           ))
         ) : (
           <p>No movies</p>
         )}
       </div>
+
+
 
     </div>
   );
