@@ -11,19 +11,20 @@ import Actor from './components/Actor';
 
 function App() {
   //State
-  const [movieList1, updateMovieList1] = useState([]);
-  const [movieList2, updateMovieList2] = useState([]);
+  const [movieList1, setMovieList1] = useState([]);
+  const [movieList2, setMovieList2] = useState([]);
 
   const [selectedMovie1, setSelectedMovie1] = useState(null);
   const [selectedMovie2, setSelectedMovie2] = useState(null);
 
-  const [filteredActors, setfilteredActors] = useState([]);
+  const [filteredActorIDs, setFilteredActorIDs] = useState([]);
+  const [actorList, setActorList] = useState([{}]);
 
 
   const [timeoutId, updateTimeoutId] = useState();
 
 
-  // Fetch Data
+  // -------------------------- Fetch Data
   const fetchMoviesList = async (searchString, movieList) => {
     fetch(`https://imdb8.p.rapidapi.com/auto-complete?q=${searchString}`, {
       "method": "GET",
@@ -35,9 +36,9 @@ function App() {
       .then(response => response.json())
       .then(jsondata => {
         if (movieList === 1) {
-          updateMovieList1(jsondata.d);
+          setMovieList1(jsondata.d);
         } else if (movieList === 2) {
-          updateMovieList2(jsondata.d);
+          setMovieList2(jsondata.d);
         }
       })
       .catch(err => {
@@ -45,7 +46,27 @@ function App() {
       });
   };
 
-  //Event handlers
+  const fetchActorBio = async (actorID) => {
+    const res = await fetch(`https://imdb8.p.rapidapi.com/actors/get-bio?nconst=${actorID}`, {
+      "method": "GET",
+      "headers": {
+        "x-rapidapi-host": "imdb8.p.rapidapi.com",
+        "x-rapidapi-key": "4863bb7b79msh45a8b3ca6f099fap10e2d3jsn2d918d27dedc"
+      }
+    })
+
+    const data = await res.json();
+    setActorList([
+      ...actorList,
+      {
+        id: data.id,
+        name: data.name
+      }
+    ]);
+    console.log(data);
+  };
+
+  //-------------------------- Event handlers
   const movieSearchQuery1 = (e) => {
     clearTimeout(timeoutId);
     const timeout = setTimeout(() => fetchMoviesList(e.target.value, 1), 500);
@@ -58,12 +79,24 @@ function App() {
     updateTimeoutId(timeout);
   };
 
+  //Update actor ids when selected movie changes
   useEffect(() => {
     if (selectedMovie1 && selectedMovie2) {
       const filterMatchingActors = selectedMovie1.filter((element) => selectedMovie2.includes(element));
-      setfilteredActors(filterMatchingActors);
+      setFilteredActorIDs(filterMatchingActors);
+
     }
-  }, [selectedMovie1, selectedMovie2])
+  }, [selectedMovie1, selectedMovie2]);
+
+  // API call when actor list changes 
+  useEffect(() => {
+    if (filteredActorIDs.length) {
+      filteredActorIDs.forEach((actorID) => {
+        const strippedID = actorID.replace('/name/', '').replace('/', '');
+        fetchActorBio(strippedID);
+      });
+    }
+  }, [filteredActorIDs]);
 
   return (
     <div className="App">
@@ -103,6 +136,17 @@ function App() {
           <p>No movies</p>
         )}
       </div>
+
+      {/* <div className="actors">
+        <h2>Actors</h2>
+        {actorList?.length ? (
+          actorList.map((actor) => (
+            <div>actor</div>
+          ))
+        ) : (
+          <p>No Actors</p>
+        )}
+      </div> */}
 
 
 
