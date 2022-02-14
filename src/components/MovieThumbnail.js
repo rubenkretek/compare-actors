@@ -10,7 +10,7 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, selectedMovie1
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "imdb8.p.rapidapi.com",
-                "x-rapidapi-key": "4863bb7b79msh45a8b3ca6f099fap10e2d3jsn2d918d27dedc"
+                "x-rapidapi-key": process.env.REACT_APP_IMDB_API_KEY
             }
         })
             .then(response => response.json())

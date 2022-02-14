@@ -21,7 +21,6 @@ function App() {
   const [actorList, setActorList] = useState([{
     id: null,
     name: null,
-
   }]);
 
 
@@ -50,37 +49,6 @@ function App() {
       });
   };
 
-  const fetchActorBio = async (actorID) => {
-    const res = await fetch(`https://imdb8.p.rapidapi.com/actors/get-bio?nconst=${actorID}`, {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-host": "imdb8.p.rapidapi.com",
-        "x-rapidapi-key": process.env.REACT_APP_IMDB_API_KEY,
-      }
-    })
-
-    const data = await res.json();
-    // This needs fixing !!!!!!!!
-    function addActorToState() {
-      setActorList([
-        ...actorList,
-        {
-          id: data.id,
-          name: data.name
-        }
-      ]);
-    }
-
-    await addActorToState();
-
-
-
-
-
-
-
-    console.log(data);
-  };
 
   //-------------------------- Event handlers
   const movieSearchQuery1 = (e) => {
@@ -107,9 +75,38 @@ function App() {
   // API call when actor list changes 
   useEffect(() => {
     if (filteredActorIDs.length) {
-      filteredActorIDs.forEach((actorID) => {
+      let itemsProcessed = 0;
+      const objectArray = [];
+
+      filteredActorIDs.forEach(async (actorID) => {
+        function sleep(milliseconds) {
+          return new Promise((resolve) => setTimeout(resolve, milliseconds))
+        }
         const strippedID = actorID.replace('/name/', '').replace('/', '');
-        fetchActorBio(strippedID);
+        fetch(`https://imdb8.p.rapidapi.com/actors/get-bio?nconst=${strippedID}`, {
+          "method": "GET",
+          "headers": {
+            "x-rapidapi-host": "imdb8.p.rapidapi.com",
+            "x-rapidapi-key": process.env.REACT_APP_IMDB_API_KEY
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            // For some reason I need to add the objects to an array before I can add them to state
+            objectArray.push({ name: data.name });
+            itemsProcessed++;
+            console.log(data.name)
+            if (itemsProcessed === filteredActorIDs.length) {
+              setActorList(objectArray);
+            }
+          })
+          .catch(err => {
+            console.error(err);
+          });
+        // Delay API call to get around 5 a second call limit
+        if (filteredActorIDs.length > 5) {
+          await sleep(500);
+        }
       });
     }
   }, [filteredActorIDs]);
