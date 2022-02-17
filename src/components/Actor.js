@@ -1,11 +1,16 @@
 import React from "react";
 
-const Actor = () => {
+const Actor = ({ name, imageURL }) => {
 
     return (
         <div>
-            <div className="movie">
-                this is the actor
+            <div className="actor">
+                <div className="actor__name">
+                    {name}
+                </div>
+                <div className="actor__image">
+                    <img src={imageURL} />
+                </div>
             </div>
         </div>
     )

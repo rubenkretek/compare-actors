@@ -21,6 +21,7 @@ function App() {
   const [actorList, setActorList] = useState([{
     id: null,
     name: null,
+    imageURL: null,
   }]);
 
 
@@ -93,9 +94,12 @@ function App() {
           .then(response => response.json())
           .then(data => {
             // For some reason I need to add the objects to an array before I can add them to state
-            objectArray.push({ name: data.name });
+            objectArray.push({
+              name: data.name,
+              imageURL: data.image.url
+            });
             itemsProcessed++;
-            console.log(data.name)
+            console.log(data.image.url)
             if (itemsProcessed === filteredActorIDs.length) {
               setActorList(objectArray);
             }
@@ -150,16 +154,20 @@ function App() {
         )}
       </div>
 
-      {/* <div className="actors">
+      <div className="actors">
         <h2>Actors</h2>
         {actorList?.length ? (
           actorList.map((actor) => (
-            <div>actor</div>
+            <Actor
+              key={actor.id}
+              name={actor.name}
+              imageURL={actor.imageURL}
+            />
           ))
         ) : (
           <p>No Actors</p>
         )}
-      </div> */}
+      </div>
 
 
 
