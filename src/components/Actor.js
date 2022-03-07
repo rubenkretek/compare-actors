@@ -9,7 +9,7 @@ const Actor = ({ name, imageURL }) => {
                     {name}
                 </div>
                 <div className="actor__image">
-                    <img src={imageURL} />
+                    <img src={imageURL} alt={`Headshot of ${name}`} />
                 </div>
             </div>
         </div>

@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Lalezar&family=Lato:wght@400;700;900&display=swap');
+
+// Packages
+@import "include-media/dist/_include-media.scss";
+
+// Global
+@import "./variables.scss";
+// @import "./global.scss";
+// @import "./layout.scss";
+
+// Components
+@import "./movies.scss";
+@import "./small-thumbnail.scss";
+
+
+
+// Global styles
+body {
+  background-color: #1C1E33;
+  color: white;
+  font-family: $body-font;
+}
+h1,h2,h3,h4 {
+  font-family: $heading-font;
+} 
+h1 {
+  font-size: 36px;
+}
+h2 {
+  font-size: 28px;
+}
+h3 {
+  font-size: 24px;
+}
+img {
+  display: block;
+  max-width: 100%;
+  box-sizing: border-box;
+}

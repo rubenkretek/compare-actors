@@ -1,6 +1,6 @@
 import React from "react";
 
-const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, selectedMovie1, setSelectedMovie1, selectedMovie2, setSelectedMovie2 }) => {
+const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, setSelectedMovie1, setSelectedMovie2, selectedMovieInfo1, setSelectedMovieInfo1, selectedMovieInfo2, setSelectedMovieInfo2 }) => {
 
 
 
@@ -17,8 +17,26 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, selectedMovie1
             .then(jsondata => {
                 if (selectedMovie === 1) {
                     setSelectedMovie1(jsondata);
+                    setSelectedMovieInfo1({
+                        ...selectedMovieInfo1,
+                        id: movieId,
+                        name: movieTitle,
+                        imageURL: movieImage,
+
+                    });
+                    console.log(movieTitle);
+                    console.log(movieImage);
                 } else if (selectedMovie === 2) {
                     setSelectedMovie2(jsondata);
+                    setSelectedMovieInfo2({
+                        ...selectedMovieInfo2,
+                        id: movieId,
+                        name: movieTitle,
+                        imageURL: movieImage,
+
+                    });
+                    console.log(movieTitle);
+                    console.log(movieImage);
                 }
             })
             .catch(err => {
@@ -31,11 +49,18 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, selectedMovie1
         fetchMovieActors(movieId, movieSelectnumber)
     }
     return (
-        <div>
-            <div className="movie" onClick={selectHandler}>
-                {movieTitle}
+        <li className={`small-thumbnail${(movieId === selectedMovieInfo1.id) ? " active active-1" : ""}`} onClick={selectHandler}>
+            <div className="small-thumbnail__image">
+                <img src={movieImage} alt="Movie poster" />
             </div>
-        </div>
+            <div className="small-thumbnail__title">
+                {movieTitle.length > 30 ? (
+                    <div className="small-thumbnail__title-inner">{movieTitle.substring(0, 30)}...</div>
+                ) : (
+                    <div className="small-thumbnail__title-inner">{movieTitle}</div>
+                )}
+            </div>
+        </li>
     )
 }
 

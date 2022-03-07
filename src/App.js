@@ -1,5 +1,7 @@
-import './App.css';
+import './styles/App.scss';
 import { useState, useEffect } from 'react';
+import { FaSearch, FaQuestion } from 'react-icons/fa';
+
 
 //Components
 import MovieThumbnail from './components/MovieThumbnail';
@@ -16,6 +18,11 @@ function App() {
 
   const [selectedMovie1, setSelectedMovie1] = useState(null);
   const [selectedMovie2, setSelectedMovie2] = useState(null);
+
+  const [selectedMovieInfo1, setSelectedMovieInfo1] = useState({});
+  const [selectedMovieInfo2, setSelectedMovieInfo2] = useState({});
+
+
 
   const [filteredActorIDs, setFilteredActorIDs] = useState([]);
   const [actorList, setActorList] = useState([{
@@ -52,12 +59,15 @@ function App() {
 
 
   //-------------------------- Event handlers
+
+  // Send api request after user stops typing for movie 1
   const movieSearchQuery1 = (e) => {
     clearTimeout(timeoutId);
     const timeout = setTimeout(() => fetchMoviesList(e.target.value, 1), 500);
     updateTimeoutId(timeout);
   };
 
+  // Send api request after user stops typing for movie 1
   const movieSearchQuery2 = (e) => {
     clearTimeout(timeoutId);
     const timeout = setTimeout(() => fetchMoviesList(e.target.value, 2), 500);
@@ -115,43 +125,146 @@ function App() {
     }
   }, [filteredActorIDs]);
 
+
   return (
     <div className="App">
+      <div className="movies">
+        <div className="movies__title">
+          <h1>Select two films to compare actors</h1>
+        </div>
+        <div className="movies__select-container">
 
-      <div className="movieList1">
-        <input onChange={movieSearchQuery1} />
-        {movieList1?.length ? (
-          movieList1.map((movie) => (
-            <MovieThumbnail
-              key={movie.id}
-              movieSelectnumber={1}
-              movieId={movie.id}
-              movieTitle={movie.l}
-              selectedMovie1={selectedMovie1}
-              setSelectedMovie1={setSelectedMovie1}
-            />
-          ))
-        ) : (
-          <p>No movies</p>
-        )}
-      </div>
+          <div className="movies__select movies__select--one">
+            <div className="movies__selected">
+              {Object.keys(selectedMovieInfo1).length ? (
+                <div className="movies__selected-thumbnail">
+                  <div className="movies__selected-poster">
+                    <img src={selectedMovieInfo1.imageURL} alt="Selected movie poster"></img>
+                  </div>
+                  <div className="movies__selected-title">
+                    <h3>{selectedMovieInfo1.name}</h3>
+                  </div>
+                </div>
+              ) : (
+                <div className="movies__selected-thumbnail">
+                  <div className="movies__selected-poster">
+                    <div className="movies__no-movie">
+                      <FaQuestion />
+                    </div>
+                  </div>
+                  <div className="movies__selected-title">
+                    <h3>Select Movie</h3>
+                  </div>
+                </div>
+              )}
+            </div>
 
-      <div className="movieList2">
-        <input onChange={movieSearchQuery2} />
-        {movieList2?.length ? (
-          movieList2.map((movie) => (
-            <MovieThumbnail
-              key={movie.id}
-              movieSelectnumber={2}
-              movieId={movie.id}
-              movieTitle={movie.l}
-              selectedMovie2={selectedMovie2}
-              setSelectedMovie2={setSelectedMovie2}
-            />
-          ))
-        ) : (
-          <p>No movies</p>
-        )}
+            <div className="movies__select-input">
+              <input onChange={movieSearchQuery1} placeholder="Start typing to search movies" />
+              <div className="movies__search-icon">
+                <FaSearch />
+              </div>
+            </div>
+
+            <div className="movies__select-thumbnails">
+              {movieList1?.length ? (
+                <ul className="small-thumbnail__list">
+                  {movieList1.map((movie) => (
+                    <MovieThumbnail
+                      key={movie.id}
+                      movieSelectnumber={1}
+                      movieId={movie.id}
+                      movieTitle={movie.l}
+                      movieImage={movie.i.imageUrl}
+                      selectedMovie1={selectedMovie1}
+                      setSelectedMovie1={setSelectedMovie1}
+                      selectedMovieInfo1={selectedMovieInfo1}
+                      setSelectedMovieInfo1={setSelectedMovieInfo1}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <ul className="small-thumbnail__list">
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <div className="movies__select movies__select--two">
+
+            <div className="movies__selected">
+              {Object.keys(selectedMovieInfo2).length ? (
+                <div className="movies__selected-thumbnail">
+                  <div className="movies__selected-poster">
+                    <img src={selectedMovieInfo2.imageURL} alt="Selected movie poster"></img>
+                  </div>
+                  <div className="movies__selected-title">
+                    <h3>{selectedMovieInfo2.name}</h3>
+                  </div>
+                </div>
+              ) : (
+                <div className="movies__selected-thumbnail">
+                  <div className="movies__selected-poster">
+                    <div className="movies__no-movie">
+                      <FaQuestion />
+                    </div>
+                  </div>
+                  <div className="movies__selected-title">
+                    <h3>Select Movie</h3>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="movies__select-input">
+              <input onChange={movieSearchQuery2} placeholder="Start typing to search movies" />
+              <div className="movies__search-icon">
+                <FaSearch />
+              </div>
+            </div>
+
+            <div className="movies__select-thumbnails">
+              {movieList2?.length ? (
+                <ul className="small-thumbnail__list">
+                  {movieList2.map((movie) => (
+                    <MovieThumbnail
+                      key={movie.id}
+                      movieSelectnumber={2}
+                      movieId={movie.id}
+                      movieTitle={movie.l}
+                      movieImage={movie.i.imageUrl}
+                      setSelectedMovie1={setSelectedMovie1}
+                      setSelectedMovie2={setSelectedMovie2}
+                      selectedMovieInfo1={selectedMovieInfo1}
+                      setSelectedMovieInfo1={setSelectedMovieInfo1}
+                      selectedMovieInfo2={selectedMovieInfo2}
+                      setSelectedMovieInfo2={setSelectedMovieInfo2}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <ul className="small-thumbnail__list">
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="actors">
