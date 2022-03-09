@@ -1,0 +1,14 @@
+.actors {
+    &__title {
+        text-align: center;
+    }
+    &__container {
+        padding: 20px 50px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        &--single {
+            grid-template-columns: 1fr;
+        }
+    }
+}

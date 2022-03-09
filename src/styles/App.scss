@@ -9,6 +9,8 @@
 // @import "./layout.scss";
 
 // Components
+@import "./actors.scss";
+@import "./actor-card.scss";
 @import "./movies.scss";
 @import "./small-thumbnail.scss";
 
@@ -36,4 +38,16 @@ img {
   display: block;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+.button {
+  text-decoration: none;
+  color: $white;
+  font-weight: $global-weight-black;
+  background-color: $primary-color;
+  border-radius: $global-border-radius;
+  padding: 15px 25px;
+  font-size: 16px;
+  text-align: center;
+
 }

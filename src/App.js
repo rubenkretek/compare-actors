@@ -1,6 +1,7 @@
 import './styles/App.scss';
 import { useState, useEffect } from 'react';
 import { FaSearch, FaQuestion } from 'react-icons/fa';
+import { v4 as uuidv4 } from 'uuid';
 
 
 //Components
@@ -25,11 +26,7 @@ function App() {
 
 
   const [filteredActorIDs, setFilteredActorIDs] = useState([]);
-  const [actorList, setActorList] = useState([{
-    id: null,
-    name: null,
-    imageURL: null,
-  }]);
+  const [actorList, setActorList] = useState([]);
 
 
   const [timeoutId, updateTimeoutId] = useState();
@@ -74,12 +71,11 @@ function App() {
     updateTimeoutId(timeout);
   };
 
-  //Update actor ids when selected movie changes
+  // When selected movie changes, compare the two actor lists and filter matching ones into filteredActorIDs
   useEffect(() => {
     if (selectedMovie1 && selectedMovie2) {
       const filterMatchingActors = selectedMovie1.filter((element) => selectedMovie2.includes(element));
       setFilteredActorIDs(filterMatchingActors);
-
     }
   }, [selectedMovie1, selectedMovie2]);
 
@@ -90,9 +86,11 @@ function App() {
       const objectArray = [];
 
       filteredActorIDs.forEach(async (actorID) => {
+
         function sleep(milliseconds) {
           return new Promise((resolve) => setTimeout(resolve, milliseconds))
         }
+
         const strippedID = actorID.replace('/name/', '').replace('/', '');
         fetch(`https://imdb8.p.rapidapi.com/actors/get-bio?nconst=${strippedID}`, {
           "method": "GET",
@@ -109,7 +107,7 @@ function App() {
               imageURL: data.image.url
             });
             itemsProcessed++;
-            console.log(data.image.url)
+            console.log("yeah buddy")
             if (itemsProcessed === filteredActorIDs.length) {
               setActorList(objectArray);
             }
@@ -171,7 +169,7 @@ function App() {
                 <ul className="small-thumbnail__list">
                   {movieList1.map((movie) => (
                     <MovieThumbnail
-                      key={movie.id}
+                      key={uuidv4()}
                       movieSelectnumber={1}
                       movieId={movie.id}
                       movieTitle={movie.l}
@@ -236,7 +234,7 @@ function App() {
                 <ul className="small-thumbnail__list">
                   {movieList2.map((movie) => (
                     <MovieThumbnail
-                      key={movie.id}
+                      key={uuidv4()}
                       movieSelectnumber={2}
                       movieId={movie.id}
                       movieTitle={movie.l}
@@ -268,18 +266,22 @@ function App() {
       </div>
 
       <div className="actors">
-        <h2>Actors</h2>
-        {actorList?.length ? (
-          actorList.map((actor) => (
-            <Actor
-              key={actor.id}
-              name={actor.name}
-              imageURL={actor.imageURL}
-            />
-          ))
-        ) : (
-          <p>No Actors</p>
-        )}
+        <div className="actors__title">
+          <h2>{selectedMovieInfo1.name} and {selectedMovieInfo2.name} share {actorList.length > 1 ? (<span>these actors</span>) : (<span>this actor</span>)}</h2>
+        </div>
+        <div className={`actors__container ${actorList.length === 1 ? ("actors__container--single") : ""}`}>
+          {actorList?.length ? (
+            actorList.map((actor) => (
+              <Actor
+                key={uuidv4()}
+                name={actor.name}
+                imageURL={actor.imageURL}
+              />
+            ))
+          ) : (
+            <div>nothing</div>
+          )}
+        </div>
       </div>
 
 

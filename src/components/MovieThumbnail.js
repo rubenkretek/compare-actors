@@ -1,4 +1,5 @@
 import React from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, setSelectedMovie1, setSelectedMovie2, selectedMovieInfo1, setSelectedMovieInfo1, selectedMovieInfo2, setSelectedMovieInfo2 }) => {
 
@@ -19,7 +20,8 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, se
                     setSelectedMovie1(jsondata);
                     setSelectedMovieInfo1({
                         ...selectedMovieInfo1,
-                        id: movieId,
+                        id: uuidv4(),
+                        imdbId: searchString,
                         name: movieTitle,
                         imageURL: movieImage,
 
@@ -30,7 +32,8 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, se
                     setSelectedMovie2(jsondata);
                     setSelectedMovieInfo2({
                         ...selectedMovieInfo2,
-                        id: movieId,
+                        id: uuidv4(),
+                        imdbId: searchString,
                         name: movieTitle,
                         imageURL: movieImage,
 
@@ -49,7 +52,7 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, se
         fetchMovieActors(movieId, movieSelectnumber)
     }
     return (
-        <li className={`small-thumbnail${(movieId === selectedMovieInfo1.id) ? " active active-1" : ""}`} onClick={selectHandler}>
+        <li className={`small-thumbnail ${(movieId === selectedMovieInfo1.imdbId) ? " active active-1" : ""}`} onClick={selectHandler}>
             <div className="small-thumbnail__image">
                 <img src={movieImage} alt="Movie poster" />
             </div>
