@@ -104,7 +104,9 @@ function App() {
             // For some reason I need to add the objects to an array before I can add them to state
             objectArray.push({
               name: data.name,
-              imageURL: data.image.url
+              imageURL: data.image.url,
+              bio: data.miniBios[0].text,
+              link: data.id
             });
             itemsProcessed++;
             console.log("yeah buddy")
@@ -276,6 +278,8 @@ function App() {
                 key={uuidv4()}
                 name={actor.name}
                 imageURL={actor.imageURL}
+                bio={actor.bio}
+                link={actor.link}
               />
             ))
           ) : (

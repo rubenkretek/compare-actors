@@ -1,6 +1,9 @@
 import React from "react";
 
-const Actor = ({ name, imageURL }) => {
+import { MdOpenInNew } from 'react-icons/md';
+
+
+const Actor = ({ name, imageURL, bio, link }) => {
 
     return (
         <div className="actor-card">
@@ -24,10 +27,14 @@ const Actor = ({ name, imageURL }) => {
                         </div>
                     </div>
                     <div className="actor-card__bio">
-                        <p>Few actors in the world have had a career quite as diverse as Leonardo DiCaprio's. DiCaprio has gone from relatively humble beginnings, as a supporting cast member of the sitcom Growing Pains (1985) and low budget horror movies, such as Critters 3 (1991), to a major teenage heartthrob in the 1990s, as the hunky lead actor in ….</p>
+                        {bio.length > 450 ? (
+                            <p>{bio.substring(0, 450)}...</p>
+                        ) : (
+                            <p>{bio}</p>
+                        )}
                     </div>
                     <div className="actor-card__link">
-                        <a href="imdb.com" className="button" target="_blank">See Leonardo DiCaprio on IMDB</a>
+                        <a href={`https://www.imdb.com${link}`} className="button" target="_blank" rel="noreferrer">See {name} on IMDB<MdOpenInNew /></a>
                     </div>
                 </div>
             </div>
