@@ -1,13 +1,16 @@
 import React from "react";
+import { MdLoop } from "react-icons/md";
 import { v4 as uuidv4 } from 'uuid';
 
-const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, setSelectedMovie1, setSelectedMovie2, selectedMovieInfo1, setSelectedMovieInfo1, selectedMovieInfo2, setSelectedMovieInfo2 }) => {
+const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, movie1ActorIds, setMovie1ActorIds, movie2ActorIds, setMovie2ActorIds }) => {
 
 
 
     // Fetch Movie Actors Data
     const fetchMovieActors = async (searchString, selectedMovie) => {
-        fetch(`https://imdb8.p.rapidapi.com/title/get-top-cast?tconst=${searchString}`, {
+
+
+        fetch(`https://imdb8.p.rapidapi.com/title/get-full-credits?tconst=${searchString}`, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "imdb8.p.rapidapi.com",
@@ -17,27 +20,11 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, se
             .then(response => response.json())
             .then(jsondata => {
                 if (selectedMovie === 1) {
-                    setSelectedMovie1(jsondata);
-                    setSelectedMovieInfo1({
-                        ...selectedMovieInfo1,
-                        id: uuidv4(),
-                        imdbId: searchString,
-                        name: movieTitle,
-                        imageURL: movieImage,
-
-                    });
+                    setMovie1ActorIds(jsondata);
                     console.log(movieTitle);
                     console.log(movieImage);
                 } else if (selectedMovie === 2) {
-                    setSelectedMovie2(jsondata);
-                    setSelectedMovieInfo2({
-                        ...selectedMovieInfo2,
-                        id: uuidv4(),
-                        imdbId: searchString,
-                        name: movieTitle,
-                        imageURL: movieImage,
-
-                    });
+                    setMovie2ActorIds(jsondata);
                     console.log(movieTitle);
                     console.log(movieImage);
                 }
@@ -52,7 +39,8 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, se
         fetchMovieActors(movieId, movieSelectnumber)
     }
     return (
-        <li className={`small-thumbnail ${(movieId === selectedMovieInfo1.imdbId) ? " active active-1" : ""}`} onClick={selectHandler}>
+        // sort this out later className={`small-thumbnail ${(movieId === movie1ActorIds.id) ? " active active-1" : ""}`
+        <li className={`small-thumbnail`} onClick={selectHandler}>
             <div className="small-thumbnail__image">
                 <img src={movieImage} alt="Movie poster" />
             </div>
