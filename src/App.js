@@ -1,5 +1,5 @@
 import './styles/App.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaSearch, FaQuestion } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,17 +17,23 @@ function App() {
   const [movieList1, setMovieList1] = useState([]);
   const [movieList2, setMovieList2] = useState([]);
 
-  const [movie1ActorIds, setMovie1ActorIds] = useState([]);
-  const [movie2ActorIds, setMovie2ActorIds] = useState([]);
+  const [selectedMovie1Info, setSelectedMovie1Info] = useState([]);
+  const [selectedMovie2Info, setSelectedMovie2Info] = useState([]);
+
+  //Let's the app know if both movies are selected
+  const [bothSelected, setBothSelected] = useState(false);
 
 
-
-
-  const [filteredActorIDs, setFilteredActorIDs] = useState([]);
-  const [actorList, setActorList] = useState([]);
+  const [matchingActors, setMatchingActors] = useState([]);
+  const [filteredActorInfo, setFilteredActorInfo] = useState([]);
 
 
   const [timeoutId, updateTimeoutId] = useState();
+
+
+
+
+
 
 
   // -------------------------- Fetch Data
@@ -69,59 +75,49 @@ function App() {
     updateTimeoutId(timeout);
   };
 
-  // When selected movie changes, compare the two actor lists and filter matching ones into filteredActorIDs
-  // useEffect(() => {
-  //   if (movie1ActorIds && movie2ActorIds) {
-  //     const filterMatchingActors = movie1ActorIds.filter((element) => movie2ActorIds.includes(element));
-  //     setFilteredActorIDs(filterMatchingActors);
-  //   }
-  // }, [movie1ActorIds, movie2ActorIds]);
-
-  // API call when actor list changes 
+  // When selected movie changes, compare the two actor lists and filter matching ones into matchingActors
   useEffect(() => {
-    if (filteredActorIDs.length) {
-      let itemsProcessed = 0;
-      const objectArray = [];
+    if (Object.keys(selectedMovie1Info).length && Object.keys(selectedMovie2Info).length) {
+      const selectedMovie1Actors = selectedMovie1Info.cast;
+      const selectedMovie2Actors = selectedMovie2Info.cast;
 
-      filteredActorIDs.forEach(async (actorID) => {
-
-        function sleep(milliseconds) {
-          return new Promise((resolve) => setTimeout(resolve, milliseconds))
-        }
-
-        const strippedID = actorID.replace('/name/', '').replace('/', '');
-        fetch(`https://imdb8.p.rapidapi.com/actors/get-bio?nconst=${strippedID}`, {
-          "method": "GET",
-          "headers": {
-            "x-rapidapi-host": "imdb8.p.rapidapi.com",
-            "x-rapidapi-key": process.env.REACT_APP_IMDB_API_KEY
-          }
-        })
-          .then(response => response.json())
-          .then(data => {
-            // For some reason I need to add the objects to an array before I can add them to state
-            objectArray.push({
-              name: data.name,
-              imageURL: data.image.url,
-              bio: data.miniBios[0].text,
-              link: data.id
-            });
-            itemsProcessed++;
-            console.log("yeah buddy")
-            if (itemsProcessed === filteredActorIDs.length) {
-              setActorList(objectArray);
-            }
-          })
-          .catch(err => {
-            console.error(err);
-          });
-        // Delay API call to get around 5 a second call limit
-        if (filteredActorIDs.length > 5) {
-          await sleep(500);
-        }
+      var filteredActors = selectedMovie1Actors.filter(function (m1) {
+        return selectedMovie2Actors.some(function (m2) {
+          return m1.id === m2.id; // return the ones with equal id
+        });
       });
+      setMatchingActors(filteredActors);
+      setBothSelected(true);
     }
-  }, [filteredActorIDs]);
+  }, [selectedMovie1Info, selectedMovie2Info]);
+
+
+
+
+  useEffect(() => {
+    const movie1cast = selectedMovie1Info.cast;
+    const movie2cast = selectedMovie2Info.cast;
+    var actorState = [];
+    // Loop through each actor in filtered actors
+    matchingActors.forEach((actor) => {
+      console.log(actor.id);
+      // Find characters for each actor for both movies
+      var infoFromMovie1 = movie1cast.filter(cast => cast.id === actor.id);
+      var infoFromMovie2 = movie2cast.filter(cast => cast.id === actor.id);
+      var character1 = infoFromMovie1[0].characters[0];
+      var character2 = infoFromMovie2[0].characters[0];
+      actorState.push({
+        id: actor.id,
+        name: actor.name,
+        image: actor.image,
+        character1: character1,
+        character2: character2
+      });
+      console.log(actorState);
+      setFilteredActorInfo(actorState);
+    });
+  }, [matchingActors])
+
 
 
   return (
@@ -133,13 +129,13 @@ function App() {
         <div className="movies__select-container">
           <div className="movies__select movies__select--one">
             <div className="movies__selected">
-              {Object.keys(movie1ActorIds).length ? (
+              {Object.keys(selectedMovie1Info).length ? (
                 <div className="movies__selected-thumbnail">
                   <div className="movies__selected-poster">
-                    <img src={movie1ActorIds.base.image.url} alt="Selected movie poster"></img>
+                    <img src={selectedMovie1Info.base.image.url} alt="Selected movie poster"></img>
                   </div>
                   <div className="movies__selected-title">
-                    <h3>{movie1ActorIds.base.title}</h3>
+                    <h3>{selectedMovie1Info.base.title}</h3>
                   </div>
                 </div>
               ) : (
@@ -172,11 +168,11 @@ function App() {
                       movieSelectnumber={1}
                       movieId={movie.id}
                       movieTitle={movie.l}
-                      movieImage={movie.i.imageUrl}
-                      movie1ActorIds={movie1ActorIds}
-                      setMovie1ActorIds={setMovie1ActorIds}
-                      movie2ActorIds={movie2ActorIds}
-                      setMovie2ActorIds={setMovie2ActorIds}
+                      // movieImage={movie.i.imageUrl}
+                      selectedMovie1Info={selectedMovie1Info}
+                      setSelectedMovie1Info={setSelectedMovie1Info}
+                      selectedMovie2Info={selectedMovie2Info}
+                      setSelectedMovie2Info={setSelectedMovie2Info}
                     />
                   ))}
                 </ul>
@@ -198,13 +194,13 @@ function App() {
           <div className="movies__select movies__select--two">
 
             <div className="movies__selected">
-              {Object.keys(movie2ActorIds).length ? (
+              {Object.keys(selectedMovie2Info).length ? (
                 <div className="movies__selected-thumbnail">
                   <div className="movies__selected-poster">
-                    <img src={movie2ActorIds.base.image.url} alt="Selected movie poster"></img>
+                    <img src={selectedMovie2Info.base.image.url} alt="Selected movie poster"></img>
                   </div>
                   <div className="movies__selected-title">
-                    <h3>{movie2ActorIds.base.title}</h3>
+                    <h3>{selectedMovie2Info.base.title}</h3>
                   </div>
                 </div>
               ) : (
@@ -237,11 +233,11 @@ function App() {
                       movieSelectnumber={2}
                       movieId={movie.id}
                       movieTitle={movie.l}
-                      movieImage={movie.i.imageUrl}
-                      movie1ActorIds={movie1ActorIds}
-                      setMovie1ActorIds={setMovie1ActorIds}
-                      movie2ActorIds={movie2ActorIds}
-                      setMovie2ActorIds={setMovie2ActorIds}
+                      // movieImage={movie.i.imageUrl}
+                      selectedMovie1Info={selectedMovie1Info}
+                      setSelectedMovie1Info={setSelectedMovie1Info}
+                      selectedMovie2Info={selectedMovie2Info}
+                      setSelectedMovie2Info={setSelectedMovie2Info}
 
                     />
                   ))}
@@ -265,18 +261,21 @@ function App() {
 
       <div className="actors">
         <div className="actors__title">
-          {/* Sort this out later !!! */}
-          {/* <h2>{movie1ActorIds.base.title} and {movie2ActorIds.base.title} share {actorList.length > 1 ? (<span>these actors</span>) : (<span>this actor</span>)}</h2> */}
+          {bothSelected &&
+            <h2>{selectedMovie1Info.base.title} and {selectedMovie2Info.base.title} share {matchingActors.length > 1 ? (<span>these actors</span>) : (<span>this actor</span>)}</h2>
+          }
         </div>
-        <div className={`actors__container ${actorList.length === 1 ? ("actors__container--single") : ""}`}>
-          {actorList?.length ? (
-            actorList.map((actor) => (
+        <div className={`actors__container ${filteredActorInfo.length === 1 ? ("actors__container--single") : ""}`}>
+          {filteredActorInfo?.length ? (
+            filteredActorInfo.map((actor) => (
               <Actor
                 key={uuidv4()}
                 name={actor.name}
-                imageURL={actor.imageURL}
-                bio={actor.bio}
-                link={actor.link}
+                image={actor.image.url}
+                character1={actor.character1}
+                character2={actor.character2}
+                // bio={actor.bio}
+                link={actor.id}
               />
             ))
           ) : (
