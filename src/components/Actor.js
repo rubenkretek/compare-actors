@@ -26,13 +26,6 @@ const Actor = ({ name, image, bio, link, character1, character2 }) => {
                             {character2}
                         </div>
                     </div>
-                    <div className="actor-card__bio">
-                        {/* {bio.length > 450 ? (
-                            <p>{bio.substring(0, 450)}...</p>
-                        ) : (
-                            <p>{bio}</p>
-                        )} */}
-                    </div>
                     <div className="actor-card__link">
                         <a href={`https://www.imdb.com${link}`} className="button" target="_blank" rel="noreferrer">See {name} on IMDB<MdOpenInNew /></a>
                     </div>

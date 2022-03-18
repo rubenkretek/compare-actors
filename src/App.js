@@ -274,7 +274,6 @@ function App() {
                 image={actor.image.url}
                 character1={actor.character1}
                 character2={actor.character2}
-                // bio={actor.bio}
                 link={actor.id}
               />
             ))
