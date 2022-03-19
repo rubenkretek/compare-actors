@@ -2,7 +2,7 @@ import React from "react";
 import { MdLoop } from "react-icons/md";
 import { v4 as uuidv4 } from 'uuid';
 
-const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, selectedMovie1Info, setSelectedMovie1Info, movieActorIds, setSelectedMovie2Info }) => {
+const MovieThumbnail = ({ movie, movieId, movieSelectnumber, setSelectedMovie1Info, setSelectedMovie2Info }) => {
 
 
 
@@ -21,12 +21,8 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, se
             .then(jsondata => {
                 if (selectedMovie === 1) {
                     setSelectedMovie1Info(jsondata);
-                    console.log(movieTitle);
-                    console.log(movieImage);
                 } else if (selectedMovie === 2) {
                     setSelectedMovie2Info(jsondata);
-                    console.log(movieTitle);
-                    console.log(movieImage);
                 }
             })
             .catch(err => {
@@ -42,13 +38,16 @@ const MovieThumbnail = ({ movieId, movieSelectnumber, movieTitle, movieImage, se
         // sort this out later className={`small-thumbnail ${(movieId === selectedMovie1Info.id) ? " active active-1" : ""}`
         <li className={`small-thumbnail`} onClick={selectHandler}>
             <div className="small-thumbnail__image">
-                <img src={movieImage} alt="Movie poster" />
+                {movie.i
+                    ? <img src={movie.i.imageUrl} alt="Movie poster" />
+                    : <div>No Image</div>
+                }
             </div>
             <div className="small-thumbnail__title">
-                {movieTitle.length > 30 ? (
-                    <div className="small-thumbnail__title-inner">{movieTitle.substring(0, 30)}...</div>
+                {movie.l.length > 30 ? (
+                    <div className="small-thumbnail__title-inner">{movie.l.substring(0, 30)}...</div>
                 ) : (
-                    <div className="small-thumbnail__title-inner">{movieTitle}</div>
+                    <div className="small-thumbnail__title-inner">{movie.l}</div>
                 )}
             </div>
         </li>

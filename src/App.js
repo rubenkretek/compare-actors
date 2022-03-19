@@ -17,6 +17,9 @@ function App() {
   const [movieList1, setMovieList1] = useState([]);
   const [movieList2, setMovieList2] = useState([]);
 
+  const [filteredmovieList1, setFilteredmovieList1] = useState([]);
+  const [filteredmovieList2, setFilteredmovieList2] = useState([]);
+
   const [selectedMovie1Info, setSelectedMovie1Info] = useState([]);
   const [selectedMovie2Info, setSelectedMovie2Info] = useState([]);
 
@@ -59,8 +62,8 @@ function App() {
   };
 
 
-  //-------------------------- Event handlers
 
+  //-------------------------- Event handlers
   // Send api request after user stops typing for movie 1
   const movieSearchQuery1 = (e) => {
     clearTimeout(timeoutId);
@@ -74,6 +77,23 @@ function App() {
     const timeout = setTimeout(() => fetchMoviesList(e.target.value, 2), 500);
     updateTimeoutId(timeout);
   };
+
+  //-------------------------- Use effect
+  // Filter out all feature films and put them in filteredMovieList1
+  useEffect(() => {
+    var featureFilms = movieList1.filter(function (movie) {
+      return movie.q === "feature";
+    });
+    setFilteredmovieList1(featureFilms);
+  }, [movieList1]);
+
+  // Filter out all feature films and put them in filteredMovieList2
+  useEffect(() => {
+    var featureFilms = movieList2.filter(function (movie) {
+      return movie.q === "feature";
+    });
+    setFilteredmovieList2(featureFilms);
+  }, [movieList2]);
 
   // When selected movie changes, compare the two actor lists and filter matching ones into matchingActors
   useEffect(() => {
@@ -91,17 +111,13 @@ function App() {
     }
   }, [selectedMovie1Info, selectedMovie2Info]);
 
-
-
-
+  // Compare actors from both movies and retrieve character names from each movie
+  // Then put all info into filteredActorInfo
   useEffect(() => {
     const movie1cast = selectedMovie1Info.cast;
     const movie2cast = selectedMovie2Info.cast;
     var actorState = [];
-    // Loop through each actor in filtered actors
     matchingActors.forEach((actor) => {
-      console.log(actor.id);
-      // Find characters for each actor for both movies
       var infoFromMovie1 = movie1cast.filter(cast => cast.id === actor.id);
       var infoFromMovie2 = movie2cast.filter(cast => cast.id === actor.id);
       var character1 = infoFromMovie1[0].characters[0];
@@ -113,7 +129,6 @@ function App() {
         character1: character1,
         character2: character2
       });
-      console.log(actorState);
       setFilteredActorInfo(actorState);
     });
   }, [matchingActors])
@@ -160,12 +175,13 @@ function App() {
             </div>
 
             <div className="movies__select-thumbnails">
-              {movieList1?.length ? (
+              {filteredmovieList1?.length ? (
                 <ul className="small-thumbnail__list">
-                  {movieList1.map((movie) => (
+                  {filteredmovieList1.map((movie) => (
                     <MovieThumbnail
                       key={uuidv4()}
                       movieSelectnumber={1}
+                      movie={movie}
                       movieId={movie.id}
                       movieTitle={movie.l}
                       // movieImage={movie.i.imageUrl}
@@ -225,9 +241,9 @@ function App() {
             </div>
 
             <div className="movies__select-thumbnails">
-              {movieList2?.length ? (
+              {filteredmovieList2?.length ? (
                 <ul className="small-thumbnail__list">
-                  {movieList2.map((movie) => (
+                  {filteredmovieList2.map((movie) => (
                     <MovieThumbnail
                       key={uuidv4()}
                       movieSelectnumber={2}
