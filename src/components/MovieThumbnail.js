@@ -1,5 +1,5 @@
 import React from "react";
-import { MdLoop } from "react-icons/md";
+import { FaImage } from "react-icons/fa";
 import { v4 as uuidv4 } from 'uuid';
 
 const MovieThumbnail = ({ movie, movieId, movieSelectnumber, setSelectedMovie1Info, setSelectedMovie2Info }) => {
@@ -40,7 +40,9 @@ const MovieThumbnail = ({ movie, movieId, movieSelectnumber, setSelectedMovie1In
             <div className="small-thumbnail__image">
                 {movie.i
                     ? <img src={movie.i.imageUrl} alt="Movie poster" />
-                    : <div>No Image</div>
+                    : <div className="small-thumbnail__no-image">
+                        <FaImage />
+                    </div>
                 }
             </div>
             <div className="small-thumbnail__title">
