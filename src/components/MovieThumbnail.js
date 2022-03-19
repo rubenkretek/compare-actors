@@ -32,7 +32,7 @@ const MovieThumbnail = ({ movie, movieId, movieSelectnumber, setSelectedMovie1In
 
 
     const selectHandler = () => {
-        fetchMovieActors(movieId, movieSelectnumber)
+        fetchMovieActors(movie.id, movieSelectnumber)
     }
     return (
         // sort this out later className={`small-thumbnail ${(movieId === selectedMovie1Info.id) ? " active active-1" : ""}`

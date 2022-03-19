@@ -182,9 +182,6 @@ function App() {
                       key={uuidv4()}
                       movieSelectnumber={1}
                       movie={movie}
-                      movieId={movie.id}
-                      movieTitle={movie.l}
-                      // movieImage={movie.i.imageUrl}
                       selectedMovie1Info={selectedMovie1Info}
                       setSelectedMovie1Info={setSelectedMovie1Info}
                       selectedMovie2Info={selectedMovie2Info}
@@ -247,9 +244,7 @@ function App() {
                     <MovieThumbnail
                       key={uuidv4()}
                       movieSelectnumber={2}
-                      movieId={movie.id}
-                      movieTitle={movie.l}
-                      // movieImage={movie.i.imageUrl}
+                      movie={movie}
                       selectedMovie1Info={selectedMovie1Info}
                       setSelectedMovie1Info={setSelectedMovie1Info}
                       selectedMovie2Info={selectedMovie2Info}
