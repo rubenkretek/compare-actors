@@ -281,11 +281,7 @@ function App() {
             filteredActorInfo.map((actor) => (
               <Actor
                 key={uuidv4()}
-                name={actor.name}
-                image={actor.image.url}
-                character1={actor.character1}
-                character2={actor.character2}
-                link={actor.id}
+                actor={actor}
               />
             ))
           ) : (
