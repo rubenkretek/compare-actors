@@ -1,4 +1,6 @@
 .movies {
+    padding-top: 50px;
+    padding-bottom: 75px;
     .movies__title {
         text-align: center;
         padding-left: 50px;
@@ -84,5 +86,9 @@
             background: $movie1-gradient;
         }
     }
-
+    .movies__select--two {
+        .movies__selected-poster {
+            background: $movie2-gradient;
+        }
+    }
 }
