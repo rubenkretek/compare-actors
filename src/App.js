@@ -130,6 +130,7 @@ function App() {
         character2: character2
       });
       setFilteredActorInfo(actorState);
+      document.getElementById("js-actors").scrollIntoView();
     });
   }, [matchingActors])
 
@@ -270,7 +271,7 @@ function App() {
         </div>
       </div>
 
-      <div className="actors">
+      <div className="actors" id="js-actors">
         <div className="actors__title">
           {bothSelected &&
             <h2>{selectedMovie1Info.base.title} and {selectedMovie2Info.base.title} share {matchingActors.length > 1 ? (<span>these actors</span>) : (<span>this actor</span>)}</h2>

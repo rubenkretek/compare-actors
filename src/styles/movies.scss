@@ -87,6 +87,22 @@
         .movies__selected-poster {
             background: $movie1-gradient;
         }
+        .movies__selected {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            &::after {
+                content: '';
+                width: 2px;
+                height: 170px;
+                background-color: $light-gray;
+                position: absolute;
+                right: -26px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
     }
     .movies__select--two {
         .movies__selected-poster {
