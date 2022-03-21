@@ -1,0 +1,31 @@
+.footer {
+    background-color: #0E0F1A;
+    padding: 30px;
+    &__container {
+        max-width: 1600px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        align-items: center;
+        justify-content: center;
+    }
+    &__social {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        color: $white;
+        text-decoration: none;
+        padding: 10px 20px;
+        transition: all .3s ease;
+        &:hover,
+        &:focus {
+            cursor: pointer;
+            background-color: $light-gray;
+            border-radius: $global-border-radius;
+        }
+    }
+    &__icon {
+        margin-top: 4px;
+    }
+}

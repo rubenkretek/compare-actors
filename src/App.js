@@ -5,8 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 //Components
-import MovieThumbnail from './components/MovieThumbnail';
 import Actor from './components/Actor';
+import Footer from './components/Footer';
+import MovieThumbnail from './components/MovieThumbnail';
 import Reset from './components/Reset';
 
 
@@ -302,6 +303,9 @@ function App() {
           />
         }
       </div>
+
+      <Footer />
+
     </div>
   );
 }
