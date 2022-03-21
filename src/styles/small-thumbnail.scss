@@ -6,6 +6,12 @@
     flex-direction: column;
     justify-content: stretch;
     transition: all .3 ease;
+    &__loading {
+        aspect-ratio: 157 / 223;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     &.active-1 {
         background: $movie1-gradient;
     }

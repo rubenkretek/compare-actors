@@ -8,10 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 import Actor from './components/Actor';
 import Footer from './components/Footer';
 import MovieThumbnail from './components/MovieThumbnail';
+import MovieThumbnailUnselected from './components/MovieThumbnailUnselected';
 import Reset from './components/Reset';
-
-
-
 
 
 function App() {
@@ -28,17 +26,13 @@ function App() {
   //Let's the app know if both movies are selected
   const [bothSelected, setBothSelected] = useState(false);
 
+  const [posterLoading, setPosterLoading] = useState(false);
+  const [thumbnailLoading, setThumbnailLoading] = useState(false);
 
   const [matchingActors, setMatchingActors] = useState([]);
   const [filteredActorInfo, setFilteredActorInfo] = useState([]);
 
-
   const [timeoutId, updateTimeoutId] = useState();
-
-
-
-
-
 
 
   // -------------------------- Fetch Data
@@ -57,6 +51,7 @@ function App() {
         } else if (movieList === 2) {
           setMovieList2(jsondata.d);
         }
+        setThumbnailLoading(false);
       })
       .catch(err => {
         console.error(err);
@@ -68,6 +63,7 @@ function App() {
   //-------------------------- Event handlers
   // Send api request after user stops typing for movie 1
   const movieSearchQuery1 = (e) => {
+    setThumbnailLoading(true);
     clearTimeout(timeoutId);
     const timeout = setTimeout(() => fetchMoviesList(e.target.value, 1), 500);
     updateTimeoutId(timeout);
@@ -75,6 +71,7 @@ function App() {
 
   // Send api request after user stops typing for movie 2
   const movieSearchQuery2 = (e) => {
+    setThumbnailLoading(true);
     clearTimeout(timeoutId);
     const timeout = setTimeout(() => fetchMoviesList(e.target.value, 2), 500);
     updateTimeoutId(timeout);
@@ -189,19 +186,20 @@ function App() {
                       setSelectedMovie1Info={setSelectedMovie1Info}
                       selectedMovie2Info={selectedMovie2Info}
                       setSelectedMovie2Info={setSelectedMovie2Info}
+                      thumbnailLoading={thumbnailLoading}
                     />
                   ))}
                 </ul>
               ) : (
                 <ul className="small-thumbnail__list">
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
                 </ul>
               )}
             </div>
@@ -252,20 +250,20 @@ function App() {
                       setSelectedMovie1Info={setSelectedMovie1Info}
                       selectedMovie2Info={selectedMovie2Info}
                       setSelectedMovie2Info={setSelectedMovie2Info}
-
+                      thumbnailLoading={thumbnailLoading}
                     />
                   ))}
                 </ul>
               ) : (
                 <ul className="small-thumbnail__list">
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
-                  <li className="small-thumbnail small-thumbnail--unselected"><FaQuestion /></li>
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
+                  <MovieThumbnailUnselected thumbnailLoading={thumbnailLoading} />
                 </ul>
               )}
             </div>
