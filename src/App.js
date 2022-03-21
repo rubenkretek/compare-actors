@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 //Components
 import MovieThumbnail from './components/MovieThumbnail';
 import Actor from './components/Actor';
+import Reset from './components/Reset';
 
 
 
@@ -130,7 +131,7 @@ function App() {
         character2: character2
       });
       setFilteredActorInfo(actorState);
-      document.getElementById("js-actors").scrollIntoView();
+      document.getElementById("js-actors").scrollIntoView(true);
     });
   }, [matchingActors])
 
@@ -138,7 +139,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="movies">
+      <div className="movies" id="js-movies">
         <div className="movies__title">
           <h1>Select two films to compare actors</h1>
         </div>
@@ -169,7 +170,7 @@ function App() {
             </div>
 
             <div className="movies__select-input">
-              <input onChange={movieSearchQuery1} placeholder="Start typing to search movies" />
+              <input onChange={movieSearchQuery1} placeholder="Start typing to search movies" id="js-input-1" />
               <div className="movies__search-icon">
                 <FaSearch />
               </div>
@@ -232,7 +233,7 @@ function App() {
             </div>
 
             <div className="movies__select-input">
-              <input onChange={movieSearchQuery2} placeholder="Start typing to search movies" />
+              <input onChange={movieSearchQuery2} placeholder="Start typing to search movies" id="js-input-2" />
               <div className="movies__search-icon">
                 <FaSearch />
               </div>
@@ -278,21 +279,29 @@ function App() {
           }
         </div>
         <div className={`actors__container ${filteredActorInfo.length === 1 ? ("actors__container--single") : ""}`}>
-          {filteredActorInfo?.length ? (
+          {filteredActorInfo.length > 0 &&
             filteredActorInfo.map((actor) => (
               <Actor
                 key={uuidv4()}
                 actor={actor}
               />
             ))
-          ) : (
-            <div>nothing</div>
-          )}
+          }
         </div>
+        {filteredActorInfo.length > 0 &&
+          <Reset
+            setMovieList1={setMovieList1}
+            setMovieList2={setMovieList2}
+            setFilteredmovieList1={setFilteredmovieList1}
+            setFilteredmovieList2={setFilteredmovieList2}
+            setSelectedMovie1Info={setSelectedMovie1Info}
+            setSelectedMovie2Info={setSelectedMovie2Info}
+            setBothSelected={setBothSelected}
+            setMatchingActors={setMatchingActors}
+            setFilteredActorInfo={setFilteredActorInfo}
+          />
+        }
       </div>
-
-
-
     </div>
   );
 }

@@ -1,0 +1,27 @@
+.button {
+    text-decoration: none;
+    color: $white;
+    font-weight: $global-weight-black;
+    background-color: $primary-color;
+    border-radius: $global-border-radius;
+    padding: 15px 25px;
+    font-size: 16px;
+    text-align: center;
+    transition: all .3s ease;
+    &:hover,
+    &:focus{
+        cursor: pointer;
+        background-color: rgba($primary-color, 0.85);
+    }
+    &--white {
+        background: $white;
+        color: $dark-gray;
+        &:hover,
+        &:focus {
+            background-color: rgba($white, 0.85);
+        }
+    }
+    &--large {
+        padding: 20px 45px;
+    }
+}
