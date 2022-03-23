@@ -26,6 +26,7 @@ function App() {
   //Let's the app know if both movies are selected
   const [bothSelected, setBothSelected] = useState(false);
 
+  // Manages loading
   const [posterLoading, setPosterLoading] = useState(false);
   const [thumbnailLoading, setThumbnailLoading] = useState(false);
 
@@ -144,27 +145,46 @@ function App() {
         <div className="movies__select-container">
           <div className="movies__select movies__select--one">
             <div className="movies__selected">
-              {Object.keys(selectedMovie1Info).length ? (
-                <div className="movies__selected-thumbnail">
-                  <div className="movies__selected-poster">
-                    <img src={selectedMovie1Info.base.image.url} alt="Selected movie poster"></img>
-                  </div>
-                  <div className="movies__selected-title">
-                    <h3>{selectedMovie1Info.base.title}</h3>
-                  </div>
-                </div>
-              ) : (
-                <div className="movies__selected-thumbnail">
-                  <div className="movies__selected-poster">
-                    <div className="movies__no-movie">
-                      <FaQuestion />
+              {
+                posterLoading === true && Object.keys(selectedMovie2Info).length < 1 ? (
+                  <div className="movies__selected-thumbnail">
+                    <div className="movies__selected-poster">
+                      <div className="movies__no-movie">
+                        <div className="spinner">
+                          <div className="double-bounce1"></div>
+                          <div className="double-bounce2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="movies__selected-title">
+                      <h3>Select Movie</h3>
                     </div>
                   </div>
-                  <div className="movies__selected-title">
-                    <h3>Select Movie</h3>
-                  </div>
-                </div>
-              )}
+                )
+                  :
+                  Object.keys(selectedMovie1Info).length ?
+                    (
+                      <div className="movies__selected-thumbnail">
+                        <div className="movies__selected-poster">
+                          <img src={selectedMovie1Info.base.image.url} alt="Selected movie poster"></img>
+                        </div>
+                        <div className="movies__selected-title">
+                          <h3>{selectedMovie1Info.base.title}</h3>
+                        </div>
+                      </div>
+                    )
+                    : (
+                      <div className="movies__selected-thumbnail">
+                        <div className="movies__selected-poster">
+                          <div className="movies__no-movie">
+                            <FaQuestion />
+                          </div>
+                        </div>
+                        <div className="movies__selected-title">
+                          <h3>Select Movie</h3>
+                        </div>
+                      </div>
+                    )}
             </div>
 
             <div className="movies__select-input">
@@ -186,7 +206,8 @@ function App() {
                       setSelectedMovie1Info={setSelectedMovie1Info}
                       selectedMovie2Info={selectedMovie2Info}
                       setSelectedMovie2Info={setSelectedMovie2Info}
-                      thumbnailLoading={thumbnailLoading}
+                      posterLoading={posterLoading}
+                      setPosterLoading={setPosterLoading}
                     />
                   ))}
                 </ul>
@@ -208,27 +229,46 @@ function App() {
           <div className="movies__select movies__select--two">
 
             <div className="movies__selected">
-              {Object.keys(selectedMovie2Info).length ? (
-                <div className="movies__selected-thumbnail">
-                  <div className="movies__selected-poster">
-                    <img src={selectedMovie2Info.base.image.url} alt="Selected movie poster"></img>
-                  </div>
-                  <div className="movies__selected-title">
-                    <h3>{selectedMovie2Info.base.title}</h3>
-                  </div>
-                </div>
-              ) : (
-                <div className="movies__selected-thumbnail">
-                  <div className="movies__selected-poster">
-                    <div className="movies__no-movie">
-                      <FaQuestion />
+              {
+                posterLoading === true && Object.keys(selectedMovie2Info).length < 1 ? (
+                  <div className="movies__selected-thumbnail">
+                    <div className="movies__selected-poster">
+                      <div className="movies__no-movie">
+                        <div className="spinner">
+                          <div className="double-bounce1"></div>
+                          <div className="double-bounce2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="movies__selected-title">
+                      <h3>Select Movie</h3>
                     </div>
                   </div>
-                  <div className="movies__selected-title">
-                    <h3>Select Movie</h3>
-                  </div>
-                </div>
-              )}
+                )
+                  :
+                  Object.keys(selectedMovie2Info).length ?
+                    (
+                      <div className="movies__selected-thumbnail">
+                        <div className="movies__selected-poster">
+                          <img src={selectedMovie2Info.base.image.url} alt="Selected movie poster"></img>
+                        </div>
+                        <div className="movies__selected-title">
+                          <h3>{selectedMovie2Info.base.title}</h3>
+                        </div>
+                      </div>
+                    )
+                    : (
+                      <div className="movies__selected-thumbnail">
+                        <div className="movies__selected-poster">
+                          <div className="movies__no-movie">
+                            <FaQuestion />
+                          </div>
+                        </div>
+                        <div className="movies__selected-title">
+                          <h3>Select Movie</h3>
+                        </div>
+                      </div>
+                    )}
             </div>
 
             <div className="movies__select-input">
@@ -250,6 +290,7 @@ function App() {
                       setSelectedMovie1Info={setSelectedMovie1Info}
                       selectedMovie2Info={selectedMovie2Info}
                       setSelectedMovie2Info={setSelectedMovie2Info}
+                      setPosterLoading={setPosterLoading}
                       thumbnailLoading={thumbnailLoading}
                     />
                   ))}
@@ -272,11 +313,15 @@ function App() {
       </div>
 
       <div className="actors" id="js-actors">
-        <div className="actors__title">
-          {bothSelected &&
-            <h2>{selectedMovie1Info.base.title} and {selectedMovie2Info.base.title} share {matchingActors.length > 1 ? (<span>these actors</span>) : (<span>this actor</span>)}</h2>
-          }
-        </div>
+        {bothSelected &&
+          <div className="actors__title">
+            {matchingActors.length > 0 ? (
+              <h2>{selectedMovie1Info.base.title} and {selectedMovie2Info.base.title} share {matchingActors.length > 1 ? (<span>these actors</span>) : (<span>this actor</span>)}</h2>
+            ) : (
+              <h2>🚫 {selectedMovie1Info.base.title} and {selectedMovie2Info.base.title} do not share any actors 🚫</h2>
+            )}
+          </div>
+        }
         <div className={`actors__container ${filteredActorInfo.length === 1 ? ("actors__container--single") : ""}`}>
           {filteredActorInfo.length > 0 &&
             filteredActorInfo.map((actor) => (

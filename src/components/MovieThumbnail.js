@@ -2,7 +2,7 @@ import React from "react";
 import { FaImage } from "react-icons/fa";
 import { v4 as uuidv4 } from 'uuid';
 
-const MovieThumbnail = ({ movie, movieSelectnumber, selectedMovie1Info, selectedMovie2Info, setSelectedMovie1Info, setSelectedMovie2Info, thumbnailLoading }) => {
+const MovieThumbnail = ({ movie, movieSelectnumber, selectedMovie1Info, selectedMovie2Info, setSelectedMovie1Info, setSelectedMovie2Info, setPosterLoading }) => {
 
     // This variable is created to make it possible to match with the ID of selected movie (see <li> item below)
     let currentMovieId = `/title/${movie.id}/`;
@@ -25,6 +25,7 @@ const MovieThumbnail = ({ movie, movieSelectnumber, selectedMovie1Info, selected
                 } else if (selectedMovie === 2) {
                     setSelectedMovie2Info(jsondata);
                 }
+                setPosterLoading(false);
             })
             .catch(err => {
                 console.error(err);
@@ -33,9 +34,11 @@ const MovieThumbnail = ({ movie, movieSelectnumber, selectedMovie1Info, selected
 
 
     const selectHandler = () => {
+        setPosterLoading(true);
         fetchMovieActors(movie.id, movieSelectnumber);
         console.log(currentMovieId);
     }
+
 
     return (
 
