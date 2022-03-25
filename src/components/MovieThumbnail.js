@@ -1,13 +1,10 @@
 import React from "react";
 import { FaImage } from "react-icons/fa";
-import { v4 as uuidv4 } from 'uuid';
 
 const MovieThumbnail = ({ movie, movieSelectnumber, selectedMovie1Info, selectedMovie2Info, setSelectedMovie1Info, setSelectedMovie2Info, setPosterLoading }) => {
 
     // This variable is created to make it possible to match with the ID of selected movie (see <li> item below)
     let currentMovieId = `/title/${movie.id}/`;
-
-
 
     // Fetch Movie Actors Data
     const fetchMovieActors = async (searchString, selectedMovie) => {
@@ -36,7 +33,6 @@ const MovieThumbnail = ({ movie, movieSelectnumber, selectedMovie1Info, selected
     const selectHandler = () => {
         setPosterLoading(true);
         fetchMovieActors(movie.id, movieSelectnumber);
-        console.log(currentMovieId);
     }
 
 

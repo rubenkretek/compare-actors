@@ -19,7 +19,6 @@ const Actor = ({ actor }) => {
                         }
                     </div>
                 </div>
-
                 <div className="actor-card__right">
                     <div className="actor-card__name">
                         <h3>{actor.name}</h3>
