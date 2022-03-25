@@ -30,7 +30,7 @@ const Reset = ({ setMovieList1, setMovieList2, setFilteredmovieList1, setFiltere
     return (
         <div className="reset">
             <div className="reset__container">
-                <a onClick={deleteHandler} className="reset__button button button--white button--large">Start Again <MdRestartAlt /></a>
+                <button onClick={deleteHandler} className="reset__button button button--white button--large">Start Again <MdRestartAlt /></button>
             </div>
         </div>
     )
