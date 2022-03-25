@@ -37,6 +37,12 @@
         a {
             display: block;
         }
+        svg {
+            vertical-align: middle;
+            margin-left: 3px;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
     }
     &__name {
         h3 {

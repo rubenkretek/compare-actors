@@ -23,7 +23,7 @@ const Footer = () => {
                         See Project on Github
                     </div>
                 </a>
-                <a className="footer__social" href="https://design-talk.co.uk/" target="blank">
+                <a className="footer__social" href="https://www.linkedin.com/in/ruben-kretek-ab296b13b/" target="blank">
                     <div className="footer__icon">
                         <FaLinkedin />
                     </div>
