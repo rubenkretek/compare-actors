@@ -5,9 +5,13 @@
         max-width: 1600px;
         margin: 0 auto;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        gap: 30px;
         align-items: center;
         justify-content: center;
+        grid-template-columns: 1fr;
+        @include media(">large") {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
     }
     &__social {
         display: flex;

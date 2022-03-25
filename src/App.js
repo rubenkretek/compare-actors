@@ -1,5 +1,5 @@
 import './styles/App.scss';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaSearch, FaQuestion } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -35,6 +35,9 @@ function App() {
 
   const [timeoutId, updateTimeoutId] = useState();
 
+  // Tells app if component is mounted for the first time
+  const isMounted = useRef(false);
+
 
   // -------------------------- Fetch Data
   const fetchMoviesList = async (searchString, movieList) => {
@@ -58,8 +61,6 @@ function App() {
         console.error(err);
       });
   };
-
-
 
   //-------------------------- Event handlers
   // Send api request after user stops typing for movie 1
@@ -130,9 +131,21 @@ function App() {
         character2: character2
       });
       setFilteredActorInfo(actorState);
-      document.getElementById("js-actors").scrollIntoView(true);
     });
-  }, [matchingActors])
+  }, [matchingActors]);
+
+  // Scroll to actor list when filteredActorInfo changes
+  useEffect(() => {
+    var delayInMilliseconds = 300;
+    if (isMounted.current) {
+      setTimeout(function () {
+        document.getElementById("js-actors").scrollIntoView(true);
+      }, delayInMilliseconds);
+    } else {
+      isMounted.current = true;
+    }
+
+  }, [filteredActorInfo]);
 
 
 
@@ -146,7 +159,7 @@ function App() {
           <div className="movies__select movies__select--one">
             <div className="movies__selected">
               {
-                posterLoading === true && Object.keys(selectedMovie2Info).length < 1 ? (
+                posterLoading === true && Object.keys(selectedMovie1Info).length === 0 ? (
                   <div className="movies__selected-thumbnail">
                     <div className="movies__selected-poster">
                       <div className="movies__no-movie">
@@ -176,8 +189,15 @@ function App() {
                     : (
                       <div className="movies__selected-thumbnail">
                         <div className="movies__selected-poster">
-                          <div className="movies__no-movie">
-                            <FaQuestion />
+                          <div>
+                            <div className="movies__no-movie">
+                              <div className="movies__icon">
+                                <FaQuestion />
+                              </div>
+                              <div className="movies__number">
+                                <h2>Movie 1</h2>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className="movies__selected-title">
@@ -188,7 +208,7 @@ function App() {
             </div>
 
             <div className="movies__select-input">
-              <input onChange={movieSearchQuery1} placeholder="Start typing to search movies" id="js-input-1" />
+              <input onChange={movieSearchQuery1} placeholder="Start typing to search" id="js-input-1" />
               <div className="movies__search-icon">
                 <FaSearch />
               </div>
@@ -230,7 +250,7 @@ function App() {
 
             <div className="movies__selected">
               {
-                posterLoading === true && Object.keys(selectedMovie2Info).length < 1 ? (
+                posterLoading === true && Object.keys(selectedMovie2Info).length === 0 ? (
                   <div className="movies__selected-thumbnail">
                     <div className="movies__selected-poster">
                       <div className="movies__no-movie">
@@ -260,8 +280,15 @@ function App() {
                     : (
                       <div className="movies__selected-thumbnail">
                         <div className="movies__selected-poster">
-                          <div className="movies__no-movie">
-                            <FaQuestion />
+                          <div>
+                            <div className="movies__no-movie">
+                              <div className="movies__icon">
+                                <FaQuestion />
+                              </div>
+                              <div className="movies__number">
+                                <h2>Movie 2</h2>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className="movies__selected-title">
@@ -272,7 +299,7 @@ function App() {
             </div>
 
             <div className="movies__select-input">
-              <input onChange={movieSearchQuery2} placeholder="Start typing to search movies" id="js-input-2" />
+              <input onChange={movieSearchQuery2} placeholder="Start typing to search" id="js-input-2" />
               <div className="movies__search-icon">
                 <FaSearch />
               </div>

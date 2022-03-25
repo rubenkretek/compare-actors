@@ -1,16 +1,26 @@
 .actors {
-    padding-top: 75px;
-    padding-bottom: 75px;
+    padding: 20px 30px;
+    @include media(">large") {
+        padding: 20px 50px;
+    }
     &__title {
         text-align: center;
     }
     &__container {
-        padding: 20px 50px;
         display: grid;
-        grid-template-columns: 1fr 1fr;
         gap: 25px;
+        max-width: 1600px;
+        margin: 0 auto;
+        grid-template-columns: 1fr;
+        @include media(">large") {
+            grid-template-columns: 1fr 1fr;
+        }
         &--single {
             grid-template-columns: 1fr;
+            .actor-card {
+                max-width: 780px;
+                margin: 0 auto;
+            }
         }
     }
 }

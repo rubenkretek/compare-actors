@@ -31,15 +31,25 @@ html {
 }
 h1,h2,h3,h4 {
   font-family: $heading-font;
+  line-height: 1;
 } 
 h1 {
-  font-size: 36px;
+  font-size: 26px;
+  @include media(">medium") {
+    font-size: 36px;
+  }
 }
 h2 {
-  font-size: 28px;
+  font-size: 22px;
+  @include media(">medium") {
+    font-size: 28px;
+  }
 }
 h3 {
-  font-size: 24px;
+  font-size: 18px;
+  @include media(">medium") {
+    font-size: 24px;
+  }
 }
 img {
   display: block;

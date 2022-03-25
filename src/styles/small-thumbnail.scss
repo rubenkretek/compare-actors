@@ -6,6 +6,16 @@
     flex-direction: column;
     justify-content: stretch;
     transition: all .3 ease;
+    @include media("<540px") {
+        &:nth-child(n+4) {
+            display: none;
+        }
+    }
+    @include media("<xlarge") {
+        &:nth-child(n+5) {
+            display: none;
+        }
+    }
     &__loading {
         aspect-ratio: 157 / 223;
         display: flex;
@@ -43,8 +53,11 @@
         margin: 0;
         padding: 0;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
         grid-gap: 15px;
+        grid-template-columns: repeat(3, 1fr);
+        @include media(">540px") {
+            grid-template-columns: repeat(4, 1fr);
+        }
     }
     &__title {
         flex-grow: 1;
